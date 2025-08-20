@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    env_file:
+      - .env
+    volumes:
+      - ./app:/app/app
+      - ./.env:/app/.env:ro
+      - app_data:/data
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8000/docs"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  app_data:
